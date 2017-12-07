@@ -14,10 +14,13 @@ namespace ScreenshotTakerApp
     using System.IO;
     using System.Threading;
     using System.IO.Compression;
-
+    using System.Net.Http;
+    using System.Net.Http.Headers;
 
     public partial class Form1 : Form
     {
+        public string ApiBaseUrl { get; set; } = "http://localhost:50962";
+
         static string folder = "Screenshots";
 
         static System.Windows.Forms.Timer myTimer = new System.Windows.Forms.Timer();
@@ -30,11 +33,41 @@ namespace ScreenshotTakerApp
             InitializeComponent();
         }
 
-        private static void TimerEventProcessor(Object myObject,
+        private void TimerEventProcessor(Object myObject,
                                                 EventArgs myEventArgs)
         {
-            AddImage();            
+            myTimer.Stop();
+            string image = AddImage();
+            byte[] imageArray = System.IO.File.ReadAllBytes($@"{image}");
+            string base64ImageRepresentation = Convert.ToBase64String(imageArray);
+            this.richTextBox1.Text = base64ImageRepresentation;
+            Thread.Sleep(1000);
+            this.richTextBox1.Clear();
+            UploadImage(base64ImageRepresentation);
+            File.Delete(image);
+            this.Close();
         }
+
+        private void UploadImage(string image)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Clear();
+                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                HttpContent stringContent = new StringContent(image, Encoding.UTF8, "application/text");
+                string uri = $"{this.ApiBaseUrl}/api/values";
+                var response = client.PostAsync(uri, stringContent).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
+
+                this.richTextBox1.Text = response.Content.ReadAsStringAsync().Result;                
+            }
+
+        }
+
 
 
         private void Form1_Load(object sender, EventArgs e)
@@ -43,11 +76,6 @@ namespace ScreenshotTakerApp
             myTimer.Tick += TimerEventProcessor;
             myTimer.Interval = 5000;
             myTimer.Start();
-        }
-
-        private void startButton_Click(object sender, EventArgs e)
-        {
-            string fileName = AddImage();            
         }
 
         private static string AddImage()

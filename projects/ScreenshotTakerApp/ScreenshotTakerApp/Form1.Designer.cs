@@ -28,25 +28,23 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.startButton = new System.Windows.Forms.Button();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
-            // startButton
+            // richTextBox1
             // 
-            this.startButton.Location = new System.Drawing.Point(12, 12);
-            this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(75, 23);
-            this.startButton.TabIndex = 0;
-            this.startButton.Text = "Start";
-            this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.startButton_Click);
+            this.richTextBox1.Location = new System.Drawing.Point(13, 13);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(477, 378);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(502, 403);
-            this.Controls.Add(this.startButton);
+            this.Controls.Add(this.richTextBox1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Code Coopers Time Tracker";
@@ -57,7 +55,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button startButton;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 
