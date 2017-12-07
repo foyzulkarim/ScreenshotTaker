@@ -35,8 +35,7 @@ namespace ScreenshotTakerApp
 
         private void TimerEventProcessor(Object myObject,
                                                 EventArgs myEventArgs)
-        {
-            myTimer.Stop();
+        {           
             string image = AddImage();
             byte[] imageArray = System.IO.File.ReadAllBytes($@"{image}");
             string base64ImageRepresentation = Convert.ToBase64String(imageArray);
@@ -44,8 +43,7 @@ namespace ScreenshotTakerApp
             Thread.Sleep(1000);
             this.richTextBox1.Clear();
             UploadImage(base64ImageRepresentation);
-            File.Delete(image);
-            this.Close();
+            File.Delete(image);            
         }
 
         private void UploadImage(string image)
