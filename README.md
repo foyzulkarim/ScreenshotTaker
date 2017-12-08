@@ -6,3 +6,5 @@ This solution is  designed for very small team to collect the screenshots of  th
 2. Run the solution. Make sure both of the project run when you press F5 / Debug. 
 3. Check the Desktop Application's UI. It will show you the update of the uploading task. 
 4. Check your uploaded images in "C:\temp\images" folder. 
+
+![alt text](https://github.com/foyzulkarim/ScreenshotTaker/blob/master/images/server-folder.PNG)
