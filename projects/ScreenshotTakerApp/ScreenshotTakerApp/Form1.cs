@@ -22,7 +22,7 @@ namespace ScreenshotTakerApp
         public string ApiBaseUrl { get; set; } = "http://localhost:50962";
 
         static string folder = "Screenshots";
-
+        static Random random;
         static System.Windows.Forms.Timer myTimer = new System.Windows.Forms.Timer();
         static int alarmCounter = 1;
         static bool exitFlag = false;
@@ -33,9 +33,10 @@ namespace ScreenshotTakerApp
             InitializeComponent();
         }
 
+
         private void TimerEventProcessor(Object myObject,
                                                 EventArgs myEventArgs)
-        {           
+        {
             string image = AddImage();
             byte[] imageArray = System.IO.File.ReadAllBytes($@"{image}");
             string base64ImageRepresentation = Convert.ToBase64String(imageArray);
@@ -43,7 +44,9 @@ namespace ScreenshotTakerApp
             Thread.Sleep(1000);
             this.richTextBox1.Clear();
             UploadImage(base64ImageRepresentation);
-            File.Delete(image);            
+            File.Delete(image);
+            int interval = random.Next(1000, 10000);
+            myTimer.Interval = interval;
         }
 
         private void UploadImage(string image)
@@ -61,18 +64,17 @@ namespace ScreenshotTakerApp
                     throw new Exception();
                 }
 
-                this.richTextBox1.Text = response.Content.ReadAsStringAsync().Result;                
+                this.richTextBox1.Text = response.Content.ReadAsStringAsync().Result;
             }
-
         }
-
 
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            random = new Random(DateTime.Now.Millisecond);
             CheckFolder();
             myTimer.Tick += TimerEventProcessor;
-            myTimer.Interval = 5000;
+            myTimer.Interval = 1000;
             myTimer.Start();
         }
 

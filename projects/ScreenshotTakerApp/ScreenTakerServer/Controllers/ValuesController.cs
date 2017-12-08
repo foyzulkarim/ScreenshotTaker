@@ -23,7 +23,7 @@ namespace ScreenTakerServer.Controllers
             this.CheckFolder();
             var base64String = Request.Content.ReadAsStringAsync().Result;
             Image img = Image.FromStream(new MemoryStream(Convert.FromBase64String(base64String)));
-            string name = DateTime.Now.Ticks.ToString();
+            string name = DateTime.Now.ToString("s").Replace("/","_").Replace(":","_");
             string path = $@"C:\temp\images\{name}.jpeg";
             img.Save(path);
             return this.Ok(path);
