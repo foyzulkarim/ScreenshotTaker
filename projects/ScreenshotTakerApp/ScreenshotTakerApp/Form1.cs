@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace ScreenshotTakerApp
 {
+    using System.Configuration;
     using System.Drawing.Imaging;
     using System.IO;
     using System.Threading;
@@ -19,7 +20,7 @@ namespace ScreenshotTakerApp
 
     public partial class Form1 : Form
     {
-        public string ApiBaseUrl { get; set; } = "http://bizbook-server.westus2.cloudapp.azure.com/st";
+        public string ApiBaseUrl { get; set; } = ConfigurationManager.AppSettings["url"];
 
         static string folder = "Screenshots";
         static Random random;
