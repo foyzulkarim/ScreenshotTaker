@@ -19,7 +19,7 @@ namespace ScreenshotTakerApp
 
     public partial class Form1 : Form
     {
-        public string ApiBaseUrl { get; set; } = "http://localhost:50962";
+        public string ApiBaseUrl { get; set; } = "http://bizbook-server.westus2.cloudapp.azure.com/st";
 
         static string folder = "Screenshots";
         static Random random;
@@ -42,7 +42,7 @@ namespace ScreenshotTakerApp
             string base64ImageRepresentation = Convert.ToBase64String(imageArray);
             UploadImage(base64ImageRepresentation);
             File.Delete(image);
-            int interval = random.Next(1000, 10000);
+            int interval = random.Next(60000, 600000);
             myTimer.Interval = interval;
         }
 
@@ -64,7 +64,7 @@ namespace ScreenshotTakerApp
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            random = new Random(DateTime.Now.Millisecond);
+            random = new Random(120000);
             CheckFolder();
             myTimer.Tick += TimerEventProcessor;
             myTimer.Interval = 1000;
