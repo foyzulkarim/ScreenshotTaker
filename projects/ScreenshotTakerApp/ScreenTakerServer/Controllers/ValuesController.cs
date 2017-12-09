@@ -15,28 +15,6 @@ namespace ScreenTakerServer.Controllers
         public IHttpActionResult Get()
         {
             return this.Ok(DateTime.Now);
-        }
-
-        [HttpPost]
-        public IHttpActionResult Post()
-        {
-            this.CheckFolder();
-            var base64String = Request.Content.ReadAsStringAsync().Result;
-            Image img = Image.FromStream(new MemoryStream(Convert.FromBase64String(base64String)));
-            string name = DateTime.Now.ToString("s").Replace("/","_").Replace(":","_");
-            string path = $@"C:\temp\images\{name}.jpeg";
-            img.Save(path);
-            return this.Ok(path);
-        }
-
-        private void CheckFolder()
-        {
-            string folder = @"C:\temp\images";
-            bool exists = Directory.Exists(folder);
-            if (!exists)
-            {
-                var directoryInfo = Directory.CreateDirectory(folder);
-            }
-        }
+        }       
     }
 }

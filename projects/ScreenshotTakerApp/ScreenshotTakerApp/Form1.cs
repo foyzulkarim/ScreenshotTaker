@@ -38,11 +38,8 @@ namespace ScreenshotTakerApp
                                                 EventArgs myEventArgs)
         {
             string image = AddImage();
-            byte[] imageArray = System.IO.File.ReadAllBytes($@"{image}");
+            byte[] imageArray = File.ReadAllBytes($@"{image}");
             string base64ImageRepresentation = Convert.ToBase64String(imageArray);
-            this.richTextBox1.Text = base64ImageRepresentation;
-            Thread.Sleep(1000);
-            this.richTextBox1.Clear();
             UploadImage(base64ImageRepresentation);
             File.Delete(image);
             int interval = random.Next(1000, 10000);
@@ -53,18 +50,14 @@ namespace ScreenshotTakerApp
         {
             using (HttpClient client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Clear();
-                //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
+                client.DefaultRequestHeaders.Clear();               
                 HttpContent stringContent = new StringContent(image, Encoding.UTF8, "application/text");
-                string uri = $"{this.ApiBaseUrl}/api/values";
+                string uri = $"{this.ApiBaseUrl}/api/Screenshot";
                 var response = client.PostAsync(uri, stringContent).Result;
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception();
-                }
-
-                this.richTextBox1.Text = response.Content.ReadAsStringAsync().Result;
+                }                
             }
         }
 
@@ -75,7 +68,7 @@ namespace ScreenshotTakerApp
             CheckFolder();
             myTimer.Tick += TimerEventProcessor;
             myTimer.Interval = 1000;
-            myTimer.Start();
+            
         }
 
         private static string AddImage()
@@ -101,6 +94,35 @@ namespace ScreenshotTakerApp
             if (!exists)
             {
                 var directoryInfo = Directory.CreateDirectory(folder);
+            }
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            myTimer.Start();
+            this.startButton.Enabled = false;
+            this.stopButton.Enabled = true;
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            myTimer.Stop();
+            this.startButton.Enabled = true;
+            this.stopButton.Enabled = false;
+        }
+
+        private void commentSendButton_Click(object sender, EventArgs e)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Clear();
+                HttpContent stringContent = new StringContent(this.textBox1.Text, Encoding.UTF8, "application/text");
+                string uri = $"{this.ApiBaseUrl}/api/Comment";
+                var response = client.PostAsync(uri, stringContent).Result;
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception();
+                }
             }
         }
     }
